@@ -1,0 +1,9 @@
+#!/bin/bash
+cd /home/pi
+while true
+do
+   ./zterm
+   pppd
+   sleep 1
+done
+

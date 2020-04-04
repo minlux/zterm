@@ -1,0 +1,79 @@
+https://totalizator.wordpress.com/2012/10/03/connect-windows-95-to-the-internet-using-linux-box-and-rs-232-serial-port-null-modem-cable/
+https://www.tldp.org/HOWTO/text/Serial-Laplink-HOWTO
+
+
+[1] http://viscil.bplaced.net/win95invirtualbox.php
+[2] http://technostuff.blogspot.com/2008/10/piped-serial-port-on-virtualbox.html
+[3] https://superuser.com/questions/604055/using-rz-and-sz-under-linux-shell
+[4] https://justcheckingonall.wordpress.com/2009/06/09/howto-vsp-socat/
+[5] https://unix.stackexchange.com/questions/118119/how-to-record-an-interactice-socat-tcp-tls-session
+[6] https://www.systemhaus-brandenburg.de/download/tools/win9x_nt4_2000/ftp/ftp.html
+[10] ~/Projekte/hemutec/doc/etc_ppp_options
+[11]http://omolini.steptail.com/mirror/ (alte Tools etc)
+
+https://linuxgazette.net/issue41/smyth.html
+https://elinux.org/RPi_Serial_Connection
+
+
+
+Verbinden der von VirtualBox emulierten seriellen Schnittstelle COM1 siehe /2/ mit
+einer durch socat emulierten seriellen Schnittstelle. Dadurch kann der Host mit
+dem Gast via tty bzw COM reden. Siehe auch /4/
+-> socat -d -d UNIX-CONNECT:/tmp/com1_sock pty,raw,echo=0
+
+Um die Kommunikation mitzuschneiden, dann nach /5/ das ganze als HEX dump in eine Datei
+-> socat -d -d -lf /dev/stdout -x -v 2> comlog.txt UNIX-CONNECT:/tmp/com1_sock pty,raw,echo=0
+
+
+Windows to Linux Direktverbindung via serieller Verbindung
+-> Unter Linux den "pppd" Daemon starten. Beispiel Konfiguration siehe /10/. 
+Die echte ppp Konfiguration ist in /etc/ppp/options zu finden.
+
+
+
+Datenübertragung via COM1/RS232 und Linux/Windows
+	In Windows kann man mit dem folgenden Befehl die COM Schnittstelle Konfigurieren
+	$   mode COM1 BAUD=96 PARITY=n DATA=8 STOP=1 RETRY=n
+	
+	Dateien senden geht dann mit
+	$   copy transmit.txt COM1
+	
+	Daten empfangen geht mit
+	$   copy COM1 receive.txt
+	
+	Unter Linux konfiguriert man die Schnittstelle wie folgt
+	$   stty -F /dev/ttyUSB0 9600 -cstopb -parenb
+	
+	Daten senden geht dann mit dem echo Befehl (man muss ein CTRL+Z = ^Z, vgl ASCII Tabelle) anhängen, damit 
+	der Empfang beim Empfänger beendet wird.
+	$   echo -e 'das naechste Zeichen wird durch druecken von CTRL+V gefolgt von CTRL+Z erzeugt^Z' > /dev/ttyUSB0
+
+http://jcoppens.com/soft/howto/bootstrap/index.en.php
+https://stackoverflow.com/questions/27310630/bash-enter-ctrl-z-keypress
+
+
+Aus einer Text-Datei mit HEX-Ziffern eine Binär-Datei machen ...
+	https://www.dostips.com/forum/viewtopic.php?f=3&t=5324&sid=2d68cad338a9db9def97c5748f664626&start=15
+	
+    Das hier sollte gehen...
+	@einstein1969: Now, you can write a utility for write binary data.
+	Here: http://www.dostips.com/forum/viewtopic.php?p=32164#p32164
+	a code that create the 256 ascii characters. The only that you need is use copy /b destinationfile+letter.chr
+
+	You can use for example the for command:
+	   for %%a in (0D 0A FF ...) Do Copy /b dest.bin+%%a.chr
+
+	Also, is possible that the technique and codification for generate the character files would be improved. But currently with this you can write binary data directly using batch, not vbs.
+	I would not write this utility for write binary using the .chr files, because I wasted many time writing bhx utility.  :D
+
+
+Datenübertragung via Linux Z-Modem Tools (sz, rz). Als Gegenstelle kann zB. HyperTerminal von MS Windows benutzt werden:
+1. Interface Initialisieren (115k2 8n1)
+$   stty -F /dev/ttyUSB0 115200
+
+2. Daten senden (Wenn an der Gegenstelle Hyperterminal läuft (und verbunden ist), öffnet sich automatisch der Empfangs-Dialog...):
+$  sz ./datei.xy > /dev/ttyUSB0 < /dev/ttyUSB0 
+
+
+
+

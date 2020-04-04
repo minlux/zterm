@@ -1,0 +1,20 @@
+nodetach
+debug
+dump
+noauth
+netmask 255.255.255.0
+proxyarp
+192.168.223.65:192.168.223.66
+#ms-dns 192.168.223.1
+#ms-wins 192.168.223.65
+lock
+passive
+lcp-echo-interval 8
+lcp-echo-failure 6
+nologfd
+crtscts
+local
+connect 'chat TIMEOUT 20000 CLIENT CLIENTSERVER'
+115200
+/dev/ttyUSB0
+
