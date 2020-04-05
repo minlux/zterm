@@ -8,7 +8,6 @@ https://www.tldp.org/HOWTO/text/Serial-Laplink-HOWTO
 [4] https://justcheckingonall.wordpress.com/2009/06/09/howto-vsp-socat/
 [5] https://unix.stackexchange.com/questions/118119/how-to-record-an-interactice-socat-tcp-tls-session
 [6] https://www.systemhaus-brandenburg.de/download/tools/win9x_nt4_2000/ftp/ftp.html
-[10] ~/Projekte/hemutec/doc/etc_ppp_options
 [11]http://omolini.steptail.com/mirror/ (alte Tools etc)
 
 https://linuxgazette.net/issue41/smyth.html
@@ -26,7 +25,7 @@ Um die Kommunikation mitzuschneiden, dann nach /5/ das ganze als HEX dump in ein
 
 
 Windows to Linux Direktverbindung via serieller Verbindung
--> Unter Linux den "pppd" Daemon starten. Beispiel Konfiguration siehe /10/. 
+-> Unter Linux den "pppd" Daemon starten. Beispiel Konfiguration siehe /10/.
 Die echte ppp Konfiguration ist in /etc/ppp/options zu finden.
 
 
@@ -34,17 +33,17 @@ Die echte ppp Konfiguration ist in /etc/ppp/options zu finden.
 Datenübertragung via COM1/RS232 und Linux/Windows
 	In Windows kann man mit dem folgenden Befehl die COM Schnittstelle Konfigurieren
 	$   mode COM1 BAUD=96 PARITY=n DATA=8 STOP=1 RETRY=n
-	
+
 	Dateien senden geht dann mit
 	$   copy transmit.txt COM1
-	
+
 	Daten empfangen geht mit
 	$   copy COM1 receive.txt
-	
+
 	Unter Linux konfiguriert man die Schnittstelle wie folgt
 	$   stty -F /dev/ttyUSB0 9600 -cstopb -parenb
-	
-	Daten senden geht dann mit dem echo Befehl (man muss ein CTRL+Z = ^Z, vgl ASCII Tabelle) anhängen, damit 
+
+	Daten senden geht dann mit dem echo Befehl (man muss ein CTRL+Z = ^Z, vgl ASCII Tabelle) anhängen, damit
 	der Empfang beim Empfänger beendet wird.
 	$   echo -e 'das naechste Zeichen wird durch druecken von CTRL+V gefolgt von CTRL+Z erzeugt^Z' > /dev/ttyUSB0
 
@@ -54,7 +53,7 @@ https://stackoverflow.com/questions/27310630/bash-enter-ctrl-z-keypress
 
 Aus einer Text-Datei mit HEX-Ziffern eine Binär-Datei machen ...
 	https://www.dostips.com/forum/viewtopic.php?f=3&t=5324&sid=2d68cad338a9db9def97c5748f664626&start=15
-	
+
     Das hier sollte gehen...
 	@einstein1969: Now, you can write a utility for write binary data.
 	Here: http://www.dostips.com/forum/viewtopic.php?p=32164#p32164
@@ -72,7 +71,7 @@ Datenübertragung via Linux Z-Modem Tools (sz, rz). Als Gegenstelle kann zB. Hyp
 $   stty -F /dev/ttyUSB0 115200
 
 2. Daten senden (Wenn an der Gegenstelle Hyperterminal läuft (und verbunden ist), öffnet sich automatisch der Empfangs-Dialog...):
-$  sz ./datei.xy > /dev/ttyUSB0 < /dev/ttyUSB0 
+$  sz ./datei.xy > /dev/ttyUSB0 < /dev/ttyUSB0
 
 
 

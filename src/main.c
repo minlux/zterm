@@ -74,7 +74,7 @@ int main(int argc, const char * argv[])
       printf("Operating serial device %s, at 115200bps 8n1\n", mTtyDevice);
 
       //send greetings
-      static const char * const greetings = "\r\nHeMuTec ZTerm\r\n" \
+      static const char * const greetings = "\r\nminlux zterm\r\n" \
                                             "Type \"zdir\" + ENTER to get list of available files\r\n" \
                                             "Type \"zsend <file>\" + ENTER to request reception of a file\r\n";
                                           //   "This tool will terminate automatically on direct cable connection request (\"CLIENT\")\r\n";
