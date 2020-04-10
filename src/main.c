@@ -17,6 +17,7 @@
 
 
 /* -- Defines ------------------------------------------------------------- */
+#define TTY_NAME_MAX          (32)
 #define RX_BUFFER_HEADER      (16)
 #define RX_BUFFER_SIZE        (128)
 
@@ -24,7 +25,6 @@
 /* -- Types --------------------------------------------------------------- */
 
 /* -- (Module) Global Variables ------------------------------------------- */
-static char mTtyDevice[32];
 static int mCtrlC;
 
 /* -- Module Global Function Prototypes ----------------------------------- */
@@ -42,51 +42,47 @@ static void m_signal_handler(int a)
 
 int main(int argc, const char * argv[])
 {
-   int serFd;
-   static unsigned char rxBuffer[RX_BUFFER_HEADER + RX_BUFFER_SIZE];
-   int rxLen;
+   unsigned char rxBuffer[RX_BUFFER_HEADER + RX_BUFFER_SIZE + TTY_NAME_MAX + 1];
+   const char * const tty = "/dev/ttyUSB0";
    const char * sysCall;
-
-
-   sprintf(mTtyDevice, "/dev/ttyUSB0"); //set default device - TODO
-   //process command line arguments
-   printf("Usage: zterm [tty-device]\n");
-   printf("Default tty-device: %s\n", mTtyDevice);
-   if (argc >= 2)
-   {
-      strncpy(mTtyDevice, argv[1], sizeof(mTtyDevice));
-      mTtyDevice[sizeof(mTtyDevice) - 1] = 0; //ensure termination
-   }
-
+   int greets = 0;
+   int serFd;
+   int rxLen;
 
    //register signal handler, to quit program usin CTRL+C
    signal(SIGINT, &m_signal_handler);
    printf("Press [CTRL + C] to quit\n\n");
+   printf("Trying to operate serial device %s, at 115200bps 8n1\n", tty);
    while (!mCtrlC)
    {
       //init serial interface
-      serFd = serport_init(mTtyDevice);
+      serFd = serport_init(tty);
       if (serFd < 0)
       {
-         printf("Failed to initialize serial device %s\n", mTtyDevice);
-         return -1;
+         printf("Failed to open serial device %s\n", tty);
+         return -2;
       }
-      printf("Operating serial device %s, at 115200bps 8n1\n", mTtyDevice);
 
       //send greetings
       static const char * const greetings = "\r\nminlux zterm\r\n" \
                                             "Type \"zdir\" + ENTER to get list of available files\r\n" \
-                                            "Type \"zsend <file>\" + ENTER to request reception of a file\r\n";
-                                          //   "This tool will terminate automatically on direct cable connection request (\"CLIENT\")\r\n";
-#if 1
-      serport_send(greetings, 2);
-#else
-      serport_send(greetings, strlen(greetings));
-#endif
+                                            "Type \"zsend <file>\" + ENTER to request reception of a file\r\n" \
+                                            "Type \"CLIENT\" to quit the server\r\n";
+      if (greets == 0)
+      {
+         serport_send(greetings, strlen(greetings)); //entire greetings
+         greets = 1; //only (the first time) once
+      }
+      else
+      {
+         serport_send(greetings, 2); //only a new-line
+      }
+
+
       //start reception
       do
       {
-         //ich lasse hier die am Anfang des Buffers noch etwas platz, damit ich da dann noch was in "exec_command" voranstellen kann
+         //spare out some leading bytes of rxBuffer, because i will prefix some chars in "exec_command" later on...
          rxLen = serport_receive(&rxBuffer[RX_BUFFER_HEADER], RX_BUFFER_SIZE);
          if (rxLen > 0)
          {
@@ -140,7 +136,7 @@ static const char * exec_command(unsigned char * rxBuffer, unsigned int rxLen)
    }
 
    //other commands
-   //todo - currently there is only one command implemented (zsend)
+   //todo
 
    //otherwise
    return NULL; //no system call desired
