@@ -2,7 +2,7 @@
 DIR=./zdata
 DEV=/dev/ttyUSB0
 
-stty -F $DEV 9600
+stty -F $DEV 19200
 #echo -e '\r\n' > $DEV
 ls -1 $DIR | sed -z 's/\n/\r\n/g' > $DEV
 #echo -e '\r\n' > $DEV
