@@ -68,7 +68,7 @@ Aus einer Text-Datei mit HEX-Ziffern eine Binär-Datei machen ...
 
 Datenübertragung via Linux Z-Modem Tools (sz, rz). Als Gegenstelle kann zB. HyperTerminal von MS Windows benutzt werden:
 1. Interface Initialisieren (115k2 8n1)
-$   stty -F /dev/ttyUSB0 14400
+$   stty -F /dev/ttyUSB0 9600
 
 2. Daten senden (Wenn an der Gegenstelle Hyperterminal läuft (und verbunden ist), öffnet sich automatisch der Empfangs-Dialog...):
 $  sz ./datei.xy > /dev/ttyUSB0 < /dev/ttyUSB0

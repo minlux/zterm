@@ -136,7 +136,7 @@ int serport_init(const char * dev)
    if (mSerFd >= 0)
    {
       //configure interface
-      m_set_interface_attribs(mSerFd, B14400);
+      m_set_interface_attribs(mSerFd, B9600);
       //drop all data in input and output buffer
       serport_flush();
    }

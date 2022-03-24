@@ -37,14 +37,14 @@ cd build
 ln -s ~/Downloads zdata
 ```
 
-Currently *zterm* is hard coded to use `/dev/ttyUSB0`. Its operates on *14400bps 8N1*. To start it you just has to call
+Currently *zterm* is hard coded to use `/dev/ttyUSB0`. Its operates on *9600bps 8N1*. To start it you just has to call
 ```
 ./zterm
 ```
 from the `build` directory.
 
 ### Client
-On the client side you can use whatever terminal program you want. You just has to connect to the serial interface with *14400bps 8N1*. Then you enter
+On the client side you can use whatever terminal program you want. You just has to connect to the serial interface with *9600bps 8N1*. Then you enter
 - `zdir` + *ENTER* to get a file list
 - `zsend <file>` + *ENTER* to request the file transfer. (then, on Windows *Hyper Terminal* for example, a popup window will appear and "receive" the file automatically)
 

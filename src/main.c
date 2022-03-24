@@ -52,7 +52,7 @@ int main(int argc, const char * argv[])
    //register signal handler, to quit program usin CTRL+C
    signal(SIGINT, &m_signal_handler);
    printf("Press [CTRL + C] to quit\n\n");
-   printf("Trying to operate serial device %s, at 14400bps 8n1\n", tty);
+   printf("Trying to operate serial device %s, at 9600bps 8n1\n", tty);
    while (!mCtrlC)
    {
       //init serial interface

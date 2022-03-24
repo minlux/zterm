@@ -15,6 +15,6 @@ nologfd
 crtscts
 local
 connect 'chat TIMEOUT 20000 CLIENT CLIENTSERVER'
-14400
+9600
 /dev/ttyUSB0
 
